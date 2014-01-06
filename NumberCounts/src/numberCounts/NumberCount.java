@@ -18,7 +18,8 @@ public class NumberCount {
     private Long maxNumber;
     private static int count;
     private static Scanner scan = new Scanner(System.in);
-    private static ArrayList<Long> current = new ArrayList<Long>(10);
+    private static ArrayList<Long> currentList = new ArrayList<Long>(10);
+    private static Set<Long> currentSet = new HashSet<Long>();
 
 
 
@@ -27,62 +28,48 @@ public class NumberCount {
         NumberCount numberCount = new NumberCount();
         numberCount.setMinNumber();
         numberCount.setMaxNumber();
-        //current.ensureCapacity(10);
-        /*
-        for (int i = 0; i < 10; i++){
-            current.add(0L-i);
-        }
-        */
 
+        //dataInput error check
         if (numberCount.getMaxNumber() < numberCount.getMinNumber()){
             System.out.println("Enter correct numbers!");
-            System.exit(0);
+            numberCount.setMinNumber();
+            numberCount.setMaxNumber();
+            System.out.println("Well done! :)");
         }
 
-        /*
         System.out.println("Numbers without digit duplicated: ");
-        for (Long i = numberCount.getMinNumber(); i <= numberCount.getMaxNumber(); i++){
+        for (Long i = numberCount.getMinNumber(); i <= numberCount.getMaxNumber(); i++) {
             parse(i);
-            if (check()){
-                count++;
-                System.out.print(i + "  ");
-            }
-        }
-        */
-
-        System.out.println("Numbers without digit duplicated: ");
-        parse(numberCount.getMinNumber());
-        for (Long i = numberCount.getMinNumber(); i <= numberCount.getMaxNumber(); i++){
-            if (check()){
+            if (check()) {
                 setCount(getCount() + 1);
                 System.out.print(i + "  ");
             }
-
-
         }
 
         /*
+        //try increment number by digit into arrayList
         System.out.println("Numbers without digit duplicated: ");
-        current = parse(numberCount.getMinNumber());
+        currentList = parse(numberCount.getMinNumber());
         for (Long i = numberCount.getMinNumber(); i <= numberCount.getMaxNumber(); i++){
             int k = 0;
-            if (check(current)){
+            if (check(currentList)){
                 count++;
                 System.out.print(i + "  ");
             }
-            if (current.getLast() < 10){
-                Long cur = current.removeLast();
-                current.addLast(cur+1);
+            if (currentList.getLast() < 10){
+                Long cur = currentList.removeLast();
+                currentList.addLast(cur+1);
             } else {
                 k++;
-                Long cur = current.get(current.size()-k);
-                current.set(current.size()-k, cur+1);
-                for (int j = current.size() - k + 1; j <= current.size(); j++){
-                    current.set(j, 0L);
+                Long cur = currentList.get(currentList.size()-k);
+                currentList.currentSet(currentList.size()-k, cur+1);
+                for (int j = currentList.size() - k + 1; j <= currentList.size(); j++){
+                    currentList.currentSet(j, 0L);
                 }
             }
         }
         */
+
         long timerEnd = System.currentTimeMillis();
         long timerDelta = timerEnd - timerBegin;
         System.out.println();
@@ -90,20 +77,20 @@ public class NumberCount {
         System.out.println("Total time: " + timerDelta);
     }
 
+    //parsing number into arrayList
     public static void parse(Long number){
-        //ArrayList<Long> list = new ArrayList<Long>();
-        //int i = 0;
+        currentList.clear();
         while (number > 0) {
-            current.add(number % 10);
+            currentList.add(number % 10);
             number = number / 10;
-            //i++;
         }
-        //return current;
     }
 
+    //check current number by digit duplicates
     public static boolean check(){
-        Set<Long> set = new HashSet<Long>(current);
-        if (set.size() < current.size()){
+        currentSet.clear();
+        currentSet.addAll(currentList);
+        if (currentSet.size() < currentList.size()){
             return false;
         }
         return true;
